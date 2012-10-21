@@ -1,0 +1,7 @@
+{
+  "name": "requireReload",
+  "version": "0.0.0",
+  "description": "A require that reloads its dependencies if they change",
+  "main": "index.js",
+  "license": "BSD"
+}
