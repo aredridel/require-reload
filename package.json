@@ -1,5 +1,5 @@
 {
-  "name": "requireReload",
+  "name": "require-reload",
   "version": "0.1.0",
   "description": "A require wrapper that reloads modules if they change",
   "main": "index.js",
