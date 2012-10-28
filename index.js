@@ -7,14 +7,15 @@ module.exports = function requireReload(thing) {
     var candidates = [];
     var path;
     var result;
+    var replacement;
 
     for (i in require.cache) {
         before[i] = i;
     }
 
-    result = module.parent.require(thing);
+    result = replacement = module.parent.require(thing);
 
-    applyProxy(result, result);
+    applyProxy();
 
     for (i in require.cache) {
         if (!before[i]) {
@@ -32,11 +33,17 @@ module.exports = function requireReload(thing) {
     function proxied(element) {
         return function() {
             return backing[element].apply(this, arguments);
-        }
+        };
     }
 
-    function applyProxy(target, replacement) {
+    function applyProxy() {
         var i;
+        if (typeof replacement == 'function') {
+            result = function() {
+                return replacement.apply(this, arguments);
+            };
+        }
+
         for (i in replacement) {
             if (typeof replacement[i] == 'function') {
                 backing[i] = replacement[i];
@@ -45,6 +52,7 @@ module.exports = function requireReload(thing) {
                 result[i] = replacement[i];
             }
         }
+
         for (i in result) {
             if (typeof replacement[i] == 'undefined') {
                 delete result[i];
@@ -57,9 +65,9 @@ module.exports = function requireReload(thing) {
         if (curr.mtime == prev.mtime) return;
         console.log("reloading", path);
         delete require.cache[path];
-        var replacement = module.parent.require(path);
-        applyProxy(result, replacement);
+        replacement = module.parent.require(path);
+        applyProxy();
     });
 
     return result;
-}
+};
