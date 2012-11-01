@@ -25,12 +25,7 @@ module.exports = function requireReload(thing) {
         }
     }
 
-    if (candidates.length == 1) {
-        path = candidates.shift();
-    } else {
-        path = candidates.shift();
-        console.log('I hope',  path, 'was the right one, not one of', candidates);
-    }
+    path = candidates.shift();
 
     function proxied(element) {
         return function() {
