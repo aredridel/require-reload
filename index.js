@@ -1,5 +1,7 @@
 var fs = require('fs');
 
+delete require.cache[module.id]; // Allow ourselves to reload so that parent is correct each time.
+
 module.exports = function requireReload(thing) {
     var backing = {};
     var i;
